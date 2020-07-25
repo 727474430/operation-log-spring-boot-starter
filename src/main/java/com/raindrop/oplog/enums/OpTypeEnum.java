@@ -2,12 +2,13 @@ package com.raindrop.oplog.enums;
 
 /**
  * @author wangliang
+ * @date 2020/07/18
  */
 public enum OpTypeEnum {
 
-    ADD("新增"),
-    UPDATE("更新"),
-    DELETE("删除");
+    INSERT("INSERT"),
+    UPDATE("UPDATE"),
+    DELETE("DELETE");
 
     private String type;
 

@@ -6,6 +6,7 @@ import java.lang.annotation.*;
 
 /**
  * @author wangliang
+ * @date 2020/07/18
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -24,6 +25,6 @@ public @interface OpLog {
      *
      * @return
      */
-    OpTypeEnum type() default OpTypeEnum.ADD;
+    OpTypeEnum type() default OpTypeEnum.INSERT;
 
 }
