@@ -1,9 +1,17 @@
 package com.raindrop.oplog.model;
 
-import java.util.Date;
+import java.io.Serializable;
 
-public class OperationLog {
+/**
+ * @author wangliang
+ * @date 2020/07/18
+ */
+public class OperationLog implements Serializable {
 
+    private static final long serialVersionUID = 6272539162600414643L;
+
+    private Integer id;
+    private String userId;
     private String opIp;
     private String opType;
     private String opDesc;
@@ -11,6 +19,22 @@ public class OperationLog {
     private String opResult;
     private String opStartTime;
     private String opEndTime;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getOpIp() {
         return opIp;
@@ -66,6 +90,21 @@ public class OperationLog {
 
     public void setOpEndTime(String opEndTime) {
         this.opEndTime = opEndTime;
+    }
+
+    @Override
+    public String toString() {
+        return "OperationLog{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", opIp='" + opIp + '\'' +
+                ", opType='" + opType + '\'' +
+                ", opDesc='" + opDesc + '\'' +
+                ", opRequest='" + opRequest + '\'' +
+                ", opResult='" + opResult + '\'' +
+                ", opStartTime='" + opStartTime + '\'' +
+                ", opEndTime='" + opEndTime + '\'' +
+                '}';
     }
 
 }
