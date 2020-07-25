@@ -9,34 +9,39 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 
 
+/**
+ * @author wangliang
+ * @date 2020/07/18
+ */
 @Aspect
 @Configuration
 public class OperationLogAop {
 
-    private static Logger logger = LoggerFactory.getLogger(OperationLogAop.class);
-
+    /**
+     * The key of user information in the Session
+     */
+    public static final String USER_ID_SESSION_KEY = "session:user:id";
     /**
      * Statistics request execute time
      */
-    private ThreadLocal<Date> time = new ThreadLocal<>();
+    private final ThreadLocal<Date> time = new ThreadLocal<>();
     /**
      * Format date to standard pattern
      */
-    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private OperationLogService operationLogService;
@@ -57,6 +62,7 @@ public class OperationLogAop {
 
         MethodSignature methodSignature = (MethodSignature) jp.getSignature();
         Method method = methodSignature.getMethod();
+        // if don't need record operation log
         if (method.getAnnotation(OpLog.class) == null) {
             time.remove();
             return result;
@@ -64,8 +70,9 @@ public class OperationLogAop {
 
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
-        recordOperationLog(request, method, result);
 
+        // record operation log and release memory
+        recordOperationLog(request, method, result);
         time.remove();
         return result;
     }
@@ -78,8 +85,11 @@ public class OperationLogAop {
      * @param result
      */
     private void recordOperationLog(HttpServletRequest request, Method method, Object result) {
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute(USER_ID_SESSION_KEY);
         OpLog opLog = method.getAnnotation(OpLog.class);
         OperationLog operationLog = new OperationLog();
+        operationLog.setUserId(userId);
         operationLog.setOpIp(request.getRemoteAddr());
         operationLog.setOpDesc(opLog.value());
         operationLog.setOpType(opLog.type().getType());
