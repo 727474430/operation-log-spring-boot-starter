@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author wangliang
+ * @date 2020/07/18
  */
 @ConfigurationProperties("op.log")
 public class OperationLogProperties {
