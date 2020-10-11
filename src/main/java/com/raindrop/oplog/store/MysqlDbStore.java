@@ -37,7 +37,7 @@ public class MysqlDbStore implements DbStore {
 
     @Override
     public boolean insert(OperationLog operationLog) {
-        String sql = "insert into operation_log(op_ip, op_type, op_desc, op_request, op_result, op_start_time, op_end_time) values " +
+        String sql = "insert into " + properties.getDbPrefix() + "operation_log(op_ip, op_type, op_desc, op_request, op_result, op_start_time, op_end_time) values " +
                 "(?,?,?,?,?,?,?)";
         int result = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql);
