@@ -38,6 +38,7 @@ public class OperationLogAutoConfigure {
     }
 
     @Bean
+    @ConditionalOnMissingBean(DbStore.class)
     public DbStore dbStore() {
         return DbFactory.getDbStore(properties.getDbType());
     }
